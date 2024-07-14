@@ -22,14 +22,25 @@ class twilioAccount {
   }
 }
 
+// TODO: Caso não tenha conta cadastrada, ele da erro, é bom alterar para um
+// aviso ou algo do tipo
 class ConfigTwilio {
   constructor() {
     this.accounts = {};
     this.so = os.platform();
-    this.configTwilio = JSON.parse(
-      fs.readFileSync(os.homedir() + "/.twilio-cli/config.json", "utf8")
-    );
+      try{
+          this.configTwilio = JSON.parse(
+              fs.readFileSync(os.homedir() + "/.twilio-cli/config.json", "utf8")
+          );
+      }
+      catch(error){
+          this.configTwilio = {};
+      }
+      if(Object.keys(this.configTwilio)>=0){
     this.profiles = this.configTwilio.profiles;
+      }else {
+          this.profiles = {};
+      }
   }
 
   setSeparaAccount(origem, destino) {
@@ -75,12 +86,15 @@ class ConfigTwilio {
   }
 
   getChoices() {
-    const choices = Object.keys(this.profiles).map((pro) => {
+      var choices = {}
+      if(this.profiles!== undefined){
+    choices = Object.keys(this.profiles).map((pro) => {
       return {
         title: pro,
         value: pro,
       };
     });
+      }
     return choices;
   }
 

@@ -31,7 +31,13 @@ const prompts = require("prompts");
       initial: 0,
     },
   ]);
+    if(configTwilio.profiles === undefined){
+console.log("Você não tem nenhuma conta Twilio confgurada");
+console.log("Por favor adicione uma conta para continuar.");
+        process.exit();
+    }else{
   configTwilio.profiles[choosedAccount.conta]["id"] = choosedAccount.conta;
+    }
 
 
   if (choosedAccount.operacao == "flowMigration") {
